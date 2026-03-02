@@ -1,9 +1,13 @@
 # Key Commands and Instructions
 
 #############
-# !!! Key files: sim-table.dat, prepare-transfers.sh !!!
-# Key results: transfers/
+# !!! Key files: sim-table.dat, prepare-transfers.sh, make_music_conf.py, and run_music.sh !!!
+
+# Key results: output/, transfers/, configs/, ic/
+
 # Before you begin, on the same level as this repo, do:
+# git clone https://github.com/cosmo-sims/MUSIC2
+# and then make the code in there so you can use it
 # git clone git@github.com:kboddy/class_public.git class_dmeff_rui_used 
 # git checkout dmeff
 # and then make the code in there so you can use that version of CLASS
@@ -107,3 +111,25 @@ python test_conversion.py                                                       
 python test_conversion.py --class-file <class_file> --camb-file <camb_file> -i <column_index>
 python test_conversion.py --class-file transfers/camb_n2_1e-2GeV_7.1e-24_tk.dat --camb-file COZMIC1-files/data_tk/idm_n2_1e-2GeV_envelope_z99_Tk.dat -i 1 -o plots/test_n2_envelope_i1.png
 ```
+
+## 7. Generate MUSIC configuration files for zoom-in ICs
+
+```bash
+python make_music_conf.py Halo004 transfers/camb_n2_1e-2GeV_1.3e-25_tk.dat
+python make_music_conf.py Halo023 transfers/camb_n4_1e-1GeV_2.5e-20_tk.dat --wnoise-file my_wnoise.dat
+python make_music_conf.py Halo004 --all-sim-table-transfers transfers
+python make_music_conf.py Halo004 --all-sim-table-transfers transfers --sim-table sim-table.dat
+```
+
+`halo_name` is required. In single-file mode, provide one transfer file and it writes one config. In batch mode (`--all-sim-table-transfers <dir>`), it reads `sim-table.dat` and writes configs for transfer files in `<dir>` that correspond to non-`done`, non-`nan` rows. Halo zoom parameters (offsets, extents, seeds) come from `COZMIC1-files/zoom-key.dat`; template comes from `COZMIC1-files/template-music.conf`; default white-noise file is `COZMIC1-files/wnoise_uc_14354454_1024-001.dat`. Output is written to `configs/music_<halo_name>_<transfer_stem>.conf`.
+
+## 8. Run MUSIC to generate initial conditions
+
+```bash
+./run_music.sh Halo004                                                           # single config (errors if >1 found)
+./run_music.sh Halo004 --all                                                     # all configs for Halo004 in configs/
+./run_music.sh Halo004 --all --config-files-dir configs                          # explicit config directory
+./run_music.sh Halo004 --all --music-exe /path/to/MUSIC                          # custom MUSIC executable
+```
+
+`halo_name` is required. Without `--all`, runs the single config matching `configs/music_<halo_name>_*.conf` (errors if more than one match). With `--all`, runs all matching configs in `--config-files-dir` (default: `configs/`). Default MUSIC executable: `$MUSIC_EXE` env var or `../MUSIC2/build/MUSIC`.
