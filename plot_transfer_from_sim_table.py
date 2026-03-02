@@ -115,7 +115,11 @@ def main():
     parser.add_argument("--mwdm", type=float, default=5.9, help="WDM mass in keV (default: 5.9)")
     parser.add_argument("--no-midpoint", action="store_true", help="omit the midpoint line")
     parser.add_argument("-s", "--save", action="store_true", help="save figure to plots/")
+    parser.add_argument("--output-dir", type=str, default=None,
+                        help="directory containing CLASS transfer files (default: output/)")
     args = parser.parse_args()
+
+    output_dir = args.output_dir if args.output_dir else OUTPUT_DIR
 
     n = args.n
     show_all = args.m.lower() == "all"
@@ -156,7 +160,7 @@ def main():
                 continue
 
             fname = build_filename(n, m, entry["sigma"])
-            fpath = os.path.join(OUTPUT_DIR, fname)
+            fpath = os.path.join(output_dir, fname)
             if not os.path.isfile(fpath):
                 print(f"  File not found, skipping: {fname}")
                 continue

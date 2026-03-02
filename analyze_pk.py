@@ -32,7 +32,7 @@ import glob
 import tempfile
 import numpy as np
 
-from plot_transfer import (
+from plot_transfer_from_sim_table import (
     SCRIPT_DIR, SIM_TABLE, CDM_FILE, OUTPUT_DIR, H,
     format_sci, parse_sim_table, unique_masses,
     build_filename, load_columns, transfer_wdm,
@@ -645,7 +645,7 @@ def main():
         help="write k_hm values into sim-table.dat")
     parser.add_argument(
         "--plot", action="store_true",
-        help="call plot_transfer.py with the same arguments")
+        help="call plot_transfer_from_sim_table.py with the same arguments")
     parser.add_argument(
         "--recalculate-sigma", action="store_true",
         help="find halfmode/envelope sigma by running CLASS")
@@ -783,7 +783,7 @@ def main():
         save_khm_to_table(results)
 
     if args.plot:
-        cmd = [sys.executable, os.path.join(SCRIPT_DIR, "plot_transfer.py"),
+        cmd = [sys.executable, os.path.join(SCRIPT_DIR, "plot_transfer_from_sim_table.py"),
                "-n", str(n), "-m", args.m,
                "--mwdm", str(args.mwdm), "-s"]
         if args.no_midpoint:

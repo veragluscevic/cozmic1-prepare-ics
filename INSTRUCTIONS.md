@@ -45,11 +45,11 @@ python class_to_camb.py output/n2_1e-2GeV_1.3e-25_sync_tk.dat output/n2_1e-2GeV_
 ## 4. Plot transfer functions
 
 ```bash
-python plot_transfer.py                                # defaults: n=2, m=1e-2
-python plot_transfer.py -n 4 -m 1e-4                   # specific (n, m)
-python plot_transfer.py -m all --no-midpoint            # all masses, skip midpoint
-python plot_transfer.py -m all --no-midpoint -s         # save to plots/
-python plot_transfer.py --mwdm 6.5                      # change WDM reference mass
+python plot_transfer_from_sim_table.py                                # defaults: n=2, m=1e-2
+python plot_transfer_from_sim_table.py -n 4 -m 1e-4                   # specific (n, m)
+python plot_transfer_from_sim_table.py -m all --no-midpoint            # all masses, skip midpoint
+python plot_transfer_from_sim_table.py -m all --no-midpoint -s         # save to plots/
+python plot_transfer_from_sim_table.py --mwdm 6.5                      # change WDM reference mass
 ```
 
 ## 5. Analyze transfer functions (compute k_hm)
